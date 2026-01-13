@@ -1,0 +1,63 @@
+#!/bin/sh
+# WOSP sudo wrapper
+# Phone-safe GUI authentication gate
+
+REAL_SUDO="/usr/bin/sudo"
+AUTH_UI="/usr/local/bin/wosp-lock"
+
+# ------------------------------------------------------------------
+# 1. If sudo is invoked non-interactively, do NOT block
+#    (scripts, services, package hooks, dpkg, etc.)
+# ------------------------------------------------------------------
+if [ ! -t 0 ] || [ ! -t 1 ]; then
+    exec "$REAL_SUDO" "$@"
+fi
+
+# ------------------------------------------------------------------
+# 2. If running over SSH, fall back to normal sudo
+# ------------------------------------------------------------------
+if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_TTY" ]; then
+    exec "$REAL_SUDO" "$@"
+fi
+
+# ------------------------------------------------------------------
+# 3. If already root, just exec
+# ------------------------------------------------------------------
+if [ "$(id -u)" -eq 0 ]; then
+    exec "$REAL_SUDO" "$@"
+fi
+
+# ------------------------------------------------------------------
+# 4. Disallow shell escalation explicitly
+#    (prevents "sudo su", "sudo -i", etc.)
+# ------------------------------------------------------------------
+case "$1" in
+    su|-i|bash|sh|dash|zsh|fish)
+        echo "wosp-auth: interactive root shells are disabled" >&2
+        exit 1
+        ;;
+esac
+
+# ------------------------------------------------------------------
+# 5. Ensure X is available (GUI auth only)
+# ------------------------------------------------------------------
+if [ -z "$DISPLAY" ]; then
+    echo "wosp-auth: no DISPLAY, cannot authenticate" >&2
+    exit 1
+fi
+
+# ------------------------------------------------------------------
+# 6. Launch authentication UI
+# ------------------------------------------------------------------
+"$AUTH_UI" --auth
+AUTH_RC=$?
+
+if [ "$AUTH_RC" -ne 0 ]; then
+    echo "wosp-auth: authentication cancelled or failed" >&2
+    exit 1
+fi
+
+# ------------------------------------------------------------------
+# 7. Execute real sudo
+# ------------------------------------------------------------------
+exec "$REAL_SUDO" "$@"

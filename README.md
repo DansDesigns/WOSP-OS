@@ -1,5 +1,6 @@
 # WOSP-OS
 A modified version of Alternix specifically designed for the OSM-Phone (WOSP).
+includes Xlibre installer script & custom C++ qt5 apps - more info in forums.
 
 recomended to use a fresh install of Debain 13 with NO desktop,
 

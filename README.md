@@ -1,10 +1,11 @@
 # WOSP-OS
 ![https://github.com/user-attachments/assets/c17aad84-e614-4e15-8da9-4362e65075ea](https://github.com/DansDesigns/WOSP-OS/blob/main/wospy.png)
+
+
 A modified version of Alternix specifically designed for the OSM-Phone (WOSP).
 includes Xlibre installer script & custom C++ qt5 apps - more info in forums.
 
 
-![](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/IMG_20260110_151104.jpg)
 to install:
 
 

@@ -8,7 +8,7 @@ includes Xlibre installer script & custom C++ qt5 apps - more info in forums.
 ![](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/Picture1.png)
 
 
-#to install:
+# to install:
 
 recomended to use a fresh install of Debain 13 with NO desktop,
 

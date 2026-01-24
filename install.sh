@@ -11,7 +11,7 @@ echo "--------------------------------------------------------------------"
 echo ""
 
 # Root of the wosp-os repo
-ALT_ROOT="$HOME/wosp-shell"
+ALT_ROOT="$HOME/WOSP-OS/wosp-shell"
 
 echo "-------------------------------------------"
 echo "              User Setup"
@@ -86,7 +86,7 @@ sudo nala install -y \
     kalk vlc qt5-style-kvantum thermald network-manager libpolkit-agent-1-dev \
     libpolkit-gobject-1-dev
 
-sudo nala install -y --no-install-recommends plasma-dialer spacebar #plasma-discover
+sudo nala install -y --no-install-recommends plasma-dialer spacebar plasma-discover
 
 # ────────────────────────────────────────────────
 # 2. Install grub theme & plymouth boot animation
@@ -160,7 +160,7 @@ curl -fsS https://dl.brave.com/install.sh | sh -s -- --yes
 # ────────────────────────────────────────────────
 echo " "
 echo "[Config] Installing user configs..."
-cp ~/wosp-shell/configs/.alacritty.toml ~/
+cp $HOME/WOSP-OS/wosp-shell/configs/.alacritty.toml ~/
 
 CONFIG_SRC="$ALT_ROOT/configs"
 CONFIG_DST="$HOME/.config"
@@ -178,7 +178,7 @@ else
 fi
 
 mkdir ~/.config/wosp/images
-cp ~/wosp-shell/images/ ~/.config/wosp/images/
+cp $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp/images/
 
 
 # ────────────────────────────────────────────────

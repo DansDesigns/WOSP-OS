@@ -67,9 +67,12 @@ sudo rm /etc/apt/trusted.gpg.d/volian.gpg
 echo "-[System] Running Nala Server Fetch..."
 sudo nala fetch
 
-echo "-[System] Installing XLibre.."
-chmod +x install_xlibre.sh
-sudo ./install_xlibre.sh
+# Not available on RPI:
+
+#echo "-[System] Installing XLibre.."
+#chmod +x install_xlibre.sh
+#sudo ./install_xlibre.sh
+
 # ────────────────────────────────────────────────
 # 1. Install apps & dependencies
 # ────────────────────────────────────────────────
@@ -83,24 +86,28 @@ sudo nala install -y \
     python3-venv picom redshift onboard samba xdotool alacritty \
     synaptic brightnessctl pavucontrol pulseaudio alsa-utils flatpak libevdev-dev\
     snapd power-profiles-daemon xprintidle libx11-dev libxtst-dev ntfs-3g \
-    kalk vlc qt5-style-kvantum thermald network-manager libpolkit-agent-1-dev \
+    kalk vlc qt5-style-kvantum  network-manager libpolkit-agent-1-dev \
     libpolkit-gobject-1-dev
+
+
+# Not available on RPI, comment out next line if using RPI:
+#sudo nala install -y thermald
 
 sudo nala install -y --no-install-recommends plasma-dialer spacebar plasma-discover
 
 # ────────────────────────────────────────────────
 # 2. Install grub theme & plymouth boot animation
 # ────────────────────────────────────────────────
-echo " "
-echo "-[System] Installing Boot Theme..."
+#echo " "
+#echo "-[System] Installing Boot Theme..."
 
 # Grub Theme:
-cd $HOME
-git clone https://github.com/hashirsajid58200p/forest-dawn-grub-theme.git
-cd forest-dawn-grub-theme
-chmod +x install.sh
-sudo ./install.sh
-sudo update-grub
+#cd $HOME
+#git clone https://github.com/hashirsajid58200p/forest-dawn-grub-theme.git
+#cd forest-dawn-grub-theme
+#chmod +x install.sh
+#sudo ./install.sh
+#sudo update-grub
 
 # ────────────────────────────────────────────────
 # 3. auto-cpufreq
@@ -108,11 +115,11 @@ sudo update-grub
 echo " "
 
 
-echo "-[System] Installing auto-cpufreq..."
-cd $HOME
-git clone https://github.com/AdnanHodzic/auto-cpufreq.git
-cd auto-cpufreq && sudo ./auto-cpufreq-installer
-sudo auto-cpufreq --install
+#echo "-[System] Installing auto-cpufreq..."
+#cd $HOME
+#git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+#cd auto-cpufreq && sudo ./auto-cpufreq-installer
+#sudo auto-cpufreq --install
 
 
 echo "[System] Installing Flatpaks.."
@@ -127,9 +134,9 @@ echo "[System] Installing Flatpaks..."
 
 # Install flatpaks
 sudo flatpak install -y flathub com.github.joseexposito.touche
-sudo flatpak install -y flathub io.github.kolunmi.Bazaar --user
-sudo flatpak install -y flathub com.valvesoftware.Steam
-sudo flatpak install -y flathub net.retrodeck.retrodeck
+#sudo flatpak install -y flathub io.github.kolunmi.Bazaar
+#sudo flatpak install -y flathub com.valvesoftware.Steam
+#sudo flatpak install -y flathub net.retrodeck.retrodeck
 sudo flatpak install -y flathub org.kde.kweather
 #sudo flatpak install -y flathub net.sourceforge.ExtremeTuxRacer
 #sudo flatpak install -y flathub io.github.swordpuffin.hunt
@@ -177,8 +184,9 @@ else
     echo "• No configs folder found, skipping."
 fi
 
+mkdir ~/.config/wosp
 mkdir ~/.config/wosp/images
-cp $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp/images/
+cp -r $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp/images/
 
 
 # ────────────────────────────────────────────────

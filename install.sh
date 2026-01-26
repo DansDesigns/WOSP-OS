@@ -184,9 +184,9 @@ else
     echo "• No configs folder found, skipping."
 fi
 
-mkdir ~/.config/wosp
-mkdir ~/.config/wosp/images
-cp -r $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp/images/
+mkdir ~/.config/wosp-shell
+mkdir ~/.config/wosp-shell/images
+cp -r $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp-shell/images/
 
 
 # ────────────────────────────────────────────────

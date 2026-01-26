@@ -80,7 +80,7 @@ sudo nala fetch
 echo "[1/10] Installing system dependencies..."
 sudo nala update
 sudo nala install -y \
-    fastfetch qtbase5-dev qt5-qmake qtbase5-dev-tools qtdeclarative5-dev \
+    fastfetch qtile qtbase5-dev qt5-qmake qtbase5-dev-tools qtdeclarative5-dev \
     fonts-noto-color-emoji libxcomposite-dev libxrender-dev libxfixes-dev \
     xwallpaper pkg-config libpoppler-qt5-dev htop python3-pip curl git \
     python3-venv picom redshift onboard samba xdotool alacritty \

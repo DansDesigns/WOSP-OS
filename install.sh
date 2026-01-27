@@ -186,7 +186,7 @@ fi
 
 mkdir ~/.config/wosp-shell
 mkdir ~/.config/wosp-shell/images
-cp -r $HOME/WOSP-OS/wosp-shell/images/ ~/.config/wosp-shell/images/
+cp -r $HOME/WOSP-OS/wosp-shell/images ~/.config/wosp-shell/images
 
 
 # ────────────────────────────────────────────────

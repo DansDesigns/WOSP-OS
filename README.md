@@ -3,7 +3,7 @@
 
 
 A modified version of Alternix specifically designed for the OSM-Phone (WOSP).
-includes Xlibre installer script & custom C++ qt5 apps - more info in forums.
+includes installer script & custom C++ qt5 apps - more info in forums.
 
 ![](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/Picture1.png)
 

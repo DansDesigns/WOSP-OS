@@ -469,16 +469,26 @@ WospShell::WospShell() {
     brightnessWidget->hide();
 
     QWidget *appsFallback = buildAppsPage();
-    appsFallback->hide();                // ✅ FIX
+    appsFallback->hide();
 
     QWidget *quickFallback = buildPlaceholder("Quick Settings is under construction");
-    quickFallback->hide();               // ✅ FIX
+    quickFallback->hide();
+
+    QWidget *leftFallback = buildPlaceholder("Left Page is under construction");
+    leftFallback->hide();
+
+    QWidget *rightFallback = buildPlaceholder("Right Page is under construction");
+    rightFallback->hide();
 
     appsPage = loadPageSo("/usr/local/bin/launcher.so", appsLib, appsFallback);
     pageUp   = loadPageSo("/usr/local/bin/quicksettings.so", quickLib, quickFallback);
+    pageLeft = loadPageSo("/usr/local/bin/pageLeft.so", leftLib, leftFallback);
+    pageRight = loadPageSo("/usr/local/bin/pageRight.so", rightLib, rightFallback);
 
-    pageLeft  = buildPlaceholder("Left Page is under construction");
-    pageRight = buildPlaceholder("Right Page is under construction");
+    
+
+    #pageLeft  = buildPlaceholder("Left Page is under construction");
+    #pageRight = buildPlaceholder("Right Page is under construction");
 
     appsPage->hide();
     pageLeft->hide();

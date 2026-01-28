@@ -283,6 +283,12 @@ echo "• Building quick-settings..."
 g++ quicksettings.cpp -o quicksettings.so -shared -fPIC -O2 $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 sudo mv quicksettings.so /usr/local/bin/
 
+g++ -shared -fPIC -std=c++17 pageLeft.cpp -o pageLeft.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
+sudo mv pageLeft.so /usr/local/bin/
+
+g++ -shared -fPIC -std=c++17 pageRight.cpp -o pageRight.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
+sudo mv pageRight.so /usr/local/bin/
+
 # ────────────────────────────────────────────────
 #
 #

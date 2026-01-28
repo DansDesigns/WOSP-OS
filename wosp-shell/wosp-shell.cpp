@@ -154,6 +154,8 @@ class WospShell : public QWidget {
 
     QLibrary appsLib;
     QLibrary quickLib;
+    QLibrary leftLib;
+    QLibrary rightLib;
 
 public:
     WospShell();
@@ -487,8 +489,8 @@ WospShell::WospShell() {
 
     
 
-    #pageLeft  = buildPlaceholder("Left Page is under construction");
-    #pageRight = buildPlaceholder("Right Page is under construction");
+    //pageLeft  = buildPlaceholder("Left Page is under construction");
+    //pageRight = buildPlaceholder("Right Page is under construction");
 
     appsPage->hide();
     pageLeft->hide();

@@ -474,7 +474,7 @@ WospShell::WospShell() {
     QWidget *quickFallback = buildPlaceholder("Quick Settings is under construction");
     quickFallback->hide();               // ✅ FIX
 
-    appsPage = loadPageSo("/usr/local/bin/apps.so", appsLib, appsFallback);
+    appsPage = loadPageSo("/usr/local/bin/launcher.so", appsLib, appsFallback);
     pageUp   = loadPageSo("/usr/local/bin/quicksettings.so", quickLib, quickFallback);
 
     pageLeft  = buildPlaceholder("Left Page is under construction");

@@ -279,6 +279,9 @@ echo "• Building wosp-shell..."
 g++ wosp-shell.cpp -o wosp-shell -std=c++17 -fPIC $(pkg-config --cflags --libs Qt5Widgets)
 chmod +x wosp-shell && sudo mv wosp-shell /usr/local/bin/
 
+echo "• Building quick-settings..."
+g++ quicksettings.cpp -o quicksettings.so -shared -fPIC -O2 $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
+sudo mv quicksettings.so /usr/local/bin/
 
 # ────────────────────────────────────────────────
 #

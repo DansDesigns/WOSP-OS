@@ -279,6 +279,8 @@ echo "• Building wosp-shell..."
 g++ wosp-shell.cpp -o wosp-shell -std=c++17 -fPIC $(pkg-config --cflags --libs Qt5Widgets)
 chmod +x wosp-shell && sudo mv wosp-shell /usr/local/bin/
 
+# ────────────────────────────────────────────────
+
 echo "• Building quick-settings..."
 g++ quicksettings.cpp -o quicksettings.so -shared -fPIC -O2 $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 sudo mv quicksettings.so /usr/local/bin/
@@ -286,15 +288,24 @@ sudo mv quicksettings.so /usr/local/bin/
 g++ -shared -fPIC -std=c++17 pageLeft.cpp -o pageLeft.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 sudo mv pageLeft.so /usr/local/bin/
 
-g++ -shared -fPIC -std=c++17 pageRight.cpp -o pageRight.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
-sudo mv pageRight.so /usr/local/bin/
+#g++ -shared -fPIC -std=c++17 pageRight.cpp -o pageRight.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
+#sudo mv pageRight.so /usr/local/bin/
 
 # ────────────────────────────────────────────────
-#
-#
-#    placeholder for wosp-shell top, left & right screens
-#
-#
+
+echo "• Building osm-power..."
+g++ -fPIC apps/osm-power.cpp -o osm-power $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
+chmod +x osm-power && sudo mv osm-power /usr/local/bin/
+
+
+echo "• Compiling osm-powerd..."
+sudo g++ -O2 apps/osm-powerd.cpp -o osm-powerd
+sudo chmod +x osm-powerd && sudo mv osm-powerd /usr/local/bin/
+sudo chown root:root /usr/local/bin/osm-powerd
+sudo chmod 4755 /usr/local/bin/osm-powerd
+
+
+
 # ────────────────────────────────────────────────
 
 cd "$ALT_ROOT/apps" || { echo "ERROR: apps folder missing"; exit 1; }

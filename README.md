@@ -1,11 +1,10 @@
 # WOSP-OS
-![WOSP Desktop](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/desktop-trimmed.png)
+![WOSP Desktop](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP_Preview.png)
 
 
 A modified version of Alternix specifically designed for the OSM-Phone (WOSP).
 includes installer script & custom C++ qt5 apps - more info in forums.
 
-![](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/Picture1.png)
 
 
 # to install:

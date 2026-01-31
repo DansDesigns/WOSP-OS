@@ -1,5 +1,5 @@
 # WOSP-OS
-![https://github.com/user-attachments/assets/c17aad84-e614-4e15-8da9-4362e65075ea](https://github.com/DansDesigns/WOSP-OS/blob/main/wospy.png)
+![WOSP Desktop](https://github.com/DansDesigns/OSM-Phone/blob/main/OS%20Concepts/WOSP/desktop-trimmed.png)
 
 
 A modified version of Alternix specifically designed for the OSM-Phone (WOSP).

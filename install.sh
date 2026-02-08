@@ -93,7 +93,7 @@ sudo nala install -y \
 # Not available on RPI, comment out next line if using RPI:
 #sudo nala install -y thermald
 
-sudo nala install -y --no-install-recommends plasma-dialer spacebar plasma-discover
+sudo nala install -y --no-install-recommends plasma-dialer spacebar
 
 # ────────────────────────────────────────────────
 # 2. Install grub theme & plymouth boot animation

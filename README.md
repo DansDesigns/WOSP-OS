@@ -7,6 +7,25 @@ includes installer script & custom C++ qt5 apps - more info in forums.
 
 # WHILE USABLE, WOSP-OS IS STILL IN DEVELOPMENT
 
+
+Key commands:
+```
+WIN + N: Popup Shortcut Menu
+
+WIN + P: Power Menu
+
+WIN + ENTER: Open Terminal
+
+WIN + F: Fullscreen Toggle
+
+WIN + R: Spawn Run Prompt
+
+WIN + 1, 2, 3: Switch to Desktop 1, 2, 3
+
+WIN + SHIFT + 1 ,2 ,3: Move Window & Switch to Desktop 1, 2, 3
+
+```
+
 # to install:
 
 recomended to use a fresh install of Debain 13 with NO desktop,

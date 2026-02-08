@@ -67,11 +67,26 @@ sudo rm /etc/apt/trusted.gpg.d/volian.gpg
 echo "-[System] Running Nala Server Fetch..."
 sudo nala fetch
 
-# Not available on RPI:
 
-#echo "-[System] Installing XLibre.."
-#chmod +x install_xlibre.sh
-#sudo ./install_xlibre.sh
+echo "-[System] Installing XLibre.."
+sudo nala update
+sudo nala install -y ca-certificates curl
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://xlibre-deb.github.io/key.asc | sudo tee /etc/apt/keyrings/xlibre-deb.asc
+sudo chmod a+r /etc/apt/keyrings/xlibre-deb.asc
+
+cat <<EOF | sudo tee /etc/apt/sources.list.d/xlibre-deb.sources
+Types: deb deb-src
+URIs: https://xlibre-deb.github.io/debian/
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Components: main
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/xlibre-deb.asc
+EOF
+
+sudo nala update
+sudo nala install xlibre
 
 # ────────────────────────────────────────────────
 # 1. Install apps & dependencies
@@ -86,17 +101,14 @@ sudo nala install -y \
     python3-venv picom redshift onboard samba xdotool alacritty \
     synaptic brightnessctl pavucontrol pulseaudio alsa-utils flatpak libevdev-dev\
     snapd power-profiles-daemon xprintidle libx11-dev libxtst-dev ntfs-3g \
-    kalk vlc qt5-style-kvantum  network-manager libpolkit-agent-1-dev \
+    kalk vlc qt5-style-kvantum network-manager libpolkit-agent-1-dev \
     libpolkit-gobject-1-dev
 
-
-# Not available on RPI, comment out next line if using RPI:
-#sudo nala install -y thermald
 
 sudo nala install -y --no-install-recommends plasma-dialer spacebar
 
 # ────────────────────────────────────────────────
-# 2. Install grub theme & plymouth boot animation
+# 2. Install grub theme & plymouth boot animation - NEEDS FIXING FOR RPI
 # ────────────────────────────────────────────────
 #echo " "
 #echo "-[System] Installing Boot Theme..."
@@ -110,17 +122,9 @@ sudo nala install -y --no-install-recommends plasma-dialer spacebar
 #sudo update-grub
 
 # ────────────────────────────────────────────────
-# 3. auto-cpufreq
+# 3. Install Flatpaks
 # ────────────────────────────────────────────────
 echo " "
-
-
-#echo "-[System] Installing auto-cpufreq..."
-#cd $HOME
-#git clone https://github.com/AdnanHodzic/auto-cpufreq.git
-#cd auto-cpufreq && sudo ./auto-cpufreq-installer
-#sudo auto-cpufreq --install
-
 
 echo "[System] Installing Flatpaks.."
 

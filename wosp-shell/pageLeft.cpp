@@ -287,7 +287,7 @@ QWidget* make_page(QWidget *parent) {
     pv->addWidget(makeSection("System", sys, 4));
     pv->addStretch();
 
-    // Center the column like your quicksettings page
+    // Center the column like quicksettings page
     QHBoxLayout *center = new QHBoxLayout(root);
     center->setContentsMargins(0,230,0,0);
     center->addStretch();

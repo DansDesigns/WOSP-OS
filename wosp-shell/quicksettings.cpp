@@ -1,5 +1,3 @@
-// quicksettings.cpp — FULL FILE
-// NO moc, NO Q_OBJECT, make_page preserved
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -67,7 +65,7 @@ protected:
     }
 };
 
-/* ───────────────────────── Plain info label (NO background) ───────────────────────── */
+/* ─────────────────────────  info label (NO background) ───────────────────────── */
 
 static QLabel* infoLabel(const QString &t) {
     QLabel *l = new QLabel(t);
@@ -123,7 +121,7 @@ public:
     }
 };
 
-/* ───────────────────────── Card factory ───────────────────────── */
+/* ───────────────────────── Card setup ───────────────────────── */
 
 static QWidget* makeCard(
     const QString &title,
@@ -302,7 +300,7 @@ static QWidget* btCard() {
     return makeCard("Bluetooth", t, summary, body);
 }
 
-/* ───────────────────────── Simple cards ───────────────────────── */
+/* ───────────────────────── Simple cards (place holders) ───────────────────────── */
 
 static QWidget* simpleCard(const QString &title, const QString &text) {
     QLabel *summary = infoLabel(text);

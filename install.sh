@@ -32,7 +32,7 @@ while true; do
     if [[ "$TARGET_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
         break
     else
-        echo "Invalid username. Use only lowercase letters, digits, hyphens, and underscores."
+        echo "[ERROR] Invalid username. Use only lowercase letters, digits, hyphens, and underscores."
     fi
 done
 
@@ -62,14 +62,20 @@ wget -qO - https://deb.volian.org/volian/volian.gpg | sudo tee /etc/apt/trusted.
 echo "-[System] Installing Nala.."
 sudo apt update -y && sudo apt install nala nala -y
 
+echo "[System] Removing nala Install Components.."
 sudo rm /etc/apt/sources.list.d/volian.list
 sudo rm /etc/apt/trusted.gpg.d/volian.gpg
-echo "-[System] Running Nala Server Fetch..."
+
+echo "[System] Running nala server fetch.."
+echo " "
+echo "------------------------------------------------------"
+echo " $TARGET_USER, PLEASE ENTER 1, 2, 3, 4, WHEN PROMPTED"
+echo "------------------------------------------------------"
+echo " "
 sudo nala fetch
 
 
 echo "-[System] Installing XLibre.."
-sudo nala update
 sudo nala install -y ca-certificates curl
 
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -93,19 +99,22 @@ sudo nala install xlibre
 # ────────────────────────────────────────────────
 
 echo "[1/10] Installing system dependencies..."
-sudo nala update
 sudo nala install -y \
     fastfetch qtile qtbase5-dev qt5-qmake qtbase5-dev-tools qtdeclarative5-dev \
     fonts-noto-color-emoji libxcomposite-dev libxrender-dev libxfixes-dev \
-    xwallpaper pkg-config libpoppler-qt5-dev htop python3-pip curl git \
-    python3-venv picom redshift onboard samba xdotool alacritty \
+    xwallpaper pkg-config libpoppler-qt5-dev htop python3-pip curl git fuse\
+    python3-venv picom redshift onboard samba xdotool alacritty aria2 sqlite3\
     synaptic brightnessctl pavucontrol pulseaudio alsa-utils flatpak libevdev-dev\
     snapd power-profiles-daemon xprintidle libx11-dev libxtst-dev ntfs-3g \
     kalk vlc qt5-style-kvantum network-manager libpolkit-agent-1-dev \
-    libpolkit-gobject-1-dev
+    libpolkit-gobject-1-dev peazip aptitude timeshift xdg-utils python3-lxml\
+    python3-yaml python3-dateutil python3-pyqt5 python3-packaging python3-request
 
-
+echo "[System] Installing Mobile Telephony Components.."
 sudo nala install -y --no-install-recommends plasma-dialer spacebar
+
+echo "[System] Installing Bauh Application Manager.."
+sudo pip3 install bauh --break-system-packages
 
 # ────────────────────────────────────────────────
 # 2. Install grub theme & plymouth boot animation - NEEDS FIXING FOR RPI
@@ -134,18 +143,19 @@ sudo rm -r /var/cache/apt/archives
 
 # Enable Flathub repository (safe to run multiple times)
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+
 echo "[System] Installing Flatpaks..."
 
 # Install flatpaks
-sudo flatpak install -y flathub com.github.joseexposito.touche
-#sudo flatpak install -y flathub io.github.kolunmi.Bazaar
-#sudo flatpak install -y flathub com.valvesoftware.Steam
-#sudo flatpak install -y flathub net.retrodeck.retrodeck
-sudo flatpak install -y flathub org.kde.kweather
-#sudo flatpak install -y flathub net.sourceforge.ExtremeTuxRacer
-#sudo flatpak install -y flathub io.github.swordpuffin.hunt
-#sudo flatpak install -y flathub com.github.avojak.warble
-#sudo flatpak install -y flathub org.kde.qrca
+flatpak install -y flathub com.github.joseexposito.touche
+#flatpak install -y flathub io.github.kolunmi.Bazaar
+#flatpak install -y flathub net.retrodeck.retrodeck
+flatpak install -y flathub org.kde.kweather
+#flatpak install -y flathub net.sourceforge.ExtremeTuxRacer
+#flatpak install -y flathub io.github.swordpuffin.hunt
+#flatpak install -y flathub com.github.avojak.warble
+flatpak install -y flathub org.kde.qrca
 
 
 # ────────────────────────────────────────────────

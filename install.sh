@@ -91,7 +91,7 @@ Architectures: $(dpkg --print-architecture)
 Signed-By: /etc/apt/keyrings/xlibre-deb.asc
 EOF
 
-sudo nala update
+sudo nala update -y
 sudo nala install xlibre
 
 # ────────────────────────────────────────────────
@@ -116,19 +116,7 @@ sudo nala install -y --no-install-recommends plasma-dialer spacebar
 echo "[System] Installing Bauh Application Manager.."
 sudo pip3 install bauh --break-system-packages
 
-# ────────────────────────────────────────────────
-# 2. Install grub theme & plymouth boot animation - NEEDS FIXING FOR RPI
-# ────────────────────────────────────────────────
-#echo " "
-#echo "-[System] Installing Boot Theme..."
 
-# Grub Theme:
-#cd $HOME
-#git clone https://github.com/hashirsajid58200p/forest-dawn-grub-theme.git
-#cd forest-dawn-grub-theme
-#chmod +x install.sh
-#sudo ./install.sh
-#sudo update-grub
 
 # ────────────────────────────────────────────────
 # 3. Install Flatpaks
@@ -576,7 +564,16 @@ Icon=upgrade
 Categories=System;
 EOF
 
-
+echo "• Creating bauh Shortcut..."
+sudo tee /usr/share/applications/bauh.desktop >/dev/null <<EOF
+[Desktop Entry]
+Type=Application
+Name=Apps (bauh)
+Comment=Application Manager
+Exec=/usr/bin/bauh
+Icon=bauh
+Categories=System;
+EOF
 
 # ────────────────────────────────────────────────
 # 14. Create YouTube WebApp launcher

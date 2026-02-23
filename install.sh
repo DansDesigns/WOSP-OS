@@ -2,8 +2,9 @@
 set -e
 
 echo "=============================================="
-echo "            Wosp-OS Installer"
+echo "              Wosp-OS Installer"
 echo "=============================================="
+echo "-------> Teaching Penguins how to fly! <-------"
 echo " "
 echo "--------------------------------------------------------------------"
 echo " Setup can take a while, be sure to have a cuppa & some good music!"
@@ -20,7 +21,7 @@ echo ""
 
 
 if [ ! -d "$ALT_ROOT" ]; then
-    echo "ERROR: $ALT_ROOT not found. Please place install.sh inside ~/wosp-shell."
+    echo "ERROR: $ALT_ROOT not found. Please place install.sh inside ~/WOSP-OS."
     exit 1
 fi
 
@@ -32,7 +33,11 @@ while true; do
     if [[ "$TARGET_USER" =~ ^[a-z_][a-z0-9_-]*$ ]]; then
         break
     else
+        echo " "
+        echo "---------------------------------------------------------------------------------------"
         echo "[ERROR] Invalid username. Use only lowercase letters, digits, hyphens, and underscores."
+        echo "---------------------------------------------------------------------------------------"
+        echo " "
     fi
 done
 
@@ -55,11 +60,17 @@ echo ""
 echo "User setup complete. Username set to: $TARGET_USER"
 echo ""
 
-echo "-[System] Adding Nala dependencies..."
+# ────────────────────────────────────────────────
+# 1. Install apps & dependencies
+# ────────────────────────────────────────────────
+echo "[1/10] Installing System dependencies..."
+echo " "
+
+echo "[System] Adding Nala dependencies..."
 echo "deb http://deb.volian.org/volian/ nala main" | sudo tee /etc/apt/sources.list.d/volian.list
 wget -qO - https://deb.volian.org/volian/volian.gpg | sudo tee /etc/apt/trusted.gpg.d/volian.gpg
 
-echo "-[System] Installing Nala.."
+echo "[System] Installing Nala.."
 sudo apt update -y && sudo apt install nala nala -y
 
 echo "[System] Removing nala Install Components.."
@@ -69,7 +80,7 @@ sudo rm /etc/apt/trusted.gpg.d/volian.gpg
 echo "[System] Running nala server fetch.."
 echo " "
 echo "------------------------------------------------------"
-echo " $TARGET_USER, PLEASE ENTER 1, 2, 3, 4, WHEN PROMPTED"
+echo " PLEASE ENTER 1, 2, 3, 4, WHEN PROMPTED"
 echo "------------------------------------------------------"
 echo " "
 sudo nala fetch
@@ -91,14 +102,12 @@ Architectures: $(dpkg --print-architecture)
 Signed-By: /etc/apt/keyrings/xlibre-deb.asc
 EOF
 
-sudo nala update -y
-sudo nala install xlibre
+sudo nala update
+sudo nala install xlibre -y
 
-# ────────────────────────────────────────────────
-# 1. Install apps & dependencies
-# ────────────────────────────────────────────────
 
-echo "[1/10] Installing system dependencies..."
+
+echo "[System] Installing Required Components.."
 sudo nala install -y \
     fastfetch qtile qtbase5-dev qt5-qmake qtbase5-dev-tools qtdeclarative5-dev \
     fonts-noto-color-emoji libxcomposite-dev libxrender-dev libxfixes-dev \
@@ -119,7 +128,7 @@ sudo pip3 install bauh --break-system-packages
 
 
 # ────────────────────────────────────────────────
-# 3. Install Flatpaks
+# 2. Install Flatpaks
 # ────────────────────────────────────────────────
 echo " "
 
@@ -137,14 +146,48 @@ echo "[System] Installing Flatpaks..."
 
 # Install flatpaks
 flatpak install -y flathub com.github.joseexposito.touche
-#flatpak install -y flathub io.github.kolunmi.Bazaar
-#flatpak install -y flathub net.retrodeck.retrodeck
 flatpak install -y flathub org.kde.kweather
+flatpak install -y flathub org.kde.qrca
+flatpak install -y flathub com.github.xournalpp.xournalpp
+
+# Flatpak Games (disabled by default)
+#flatpak install -y flathub net.retrodeck.retrodeck
 #flatpak install -y flathub net.sourceforge.ExtremeTuxRacer
 #flatpak install -y flathub io.github.swordpuffin.hunt
 #flatpak install -y flathub com.github.avojak.warble
-flatpak install -y flathub org.kde.qrca
 
+# ────────────────────────────────────────────────
+# 3. Install all .deb packages in ../wosp-shell/installers/
+# ────────────────────────────────────────────────
+echo "[System] Installing local .deb packages..."
+
+INSTALLER_DIR="$ALT_ROOT/installers"
+
+if [ -d "$INSTALLER_DIR" ]; then
+    DEB_COUNT=$(ls -1 "$INSTALLER_DIR"/*.deb 2>/dev/null | wc -l)
+
+    if [ "$DEB_COUNT" -gt 0 ]; then
+        echo "• Found $DEB_COUNT installer package(s). Installing..."
+
+        # Install each .deb file
+        sudo dpkg -i "$INSTALLER_DIR"/*.deb || true
+
+        # Fix missing dependencies automatically
+        #sudo apt-get update -y
+        sudo nala install -f -y
+
+        # Install each .deb file AGAIN
+        sudo dpkg -i "$INSTALLER_DIR"/*.deb || true
+
+        echo "• Local installer packages installed."
+    else
+        echo "• No .deb files in installers folder, skipping."
+    fi
+else
+    echo "• No installers folder found, skipping."
+fi
+
+cp $HOME/WOSP-OS/wosp-shell/installers/decky_installer.desktop ~/
 
 # ────────────────────────────────────────────────
 # 4. Curl Commands
@@ -170,6 +213,8 @@ curl -fsS https://dl.brave.com/install.sh | sh -s -- --yes
 echo " "
 echo "[Config] Installing user configs..."
 cp $HOME/WOSP-OS/wosp-shell/configs/.alacritty.toml ~/
+sudo mv -r $HOME/WOSP-OS/wosp-shell/configs/onboard /usr/share/onboard
+
 
 CONFIG_SRC="$ALT_ROOT/configs"
 CONFIG_DST="$HOME/.config"
@@ -189,6 +234,7 @@ fi
 mkdir ~/.config/wosp-shell
 mkdir ~/.config/wosp-shell/images
 cp -r $HOME/WOSP-OS/wosp-shell/images ~/.config/wosp-shell/images
+
 
 
 # ────────────────────────────────────────────────
@@ -287,9 +333,11 @@ echo "• Building quick-settings..."
 g++ quicksettings.cpp -o quicksettings.so -shared -fPIC -O2 $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 sudo mv quicksettings.so /usr/local/bin/
 
+echo "• Building Left Page..."
 g++ -shared -fPIC -std=c++17 pageLeft.cpp -o pageLeft.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 sudo mv pageLeft.so /usr/local/bin/
 
+echo "• Building Right Page..."
 #g++ -shared -fPIC -std=c++17 pageRight.cpp -o pageRight.so $(pkg-config --cflags --libs Qt5Widgets Qt5Gui Qt5Core)
 #sudo mv pageRight.so /usr/local/bin/
 
@@ -300,7 +348,7 @@ g++ -fPIC apps/osm-power.cpp -o osm-power $(pkg-config --cflags --libs Qt5Widget
 chmod +x osm-power && sudo mv osm-power /usr/local/bin/
 
 
-echo "• Compiling osm-powerd..."
+echo "• Compiling osm-powerd daemon..."
 sudo g++ -O2 apps/osm-powerd.cpp -o osm-powerd
 sudo chmod +x osm-powerd && sudo mv osm-powerd /usr/local/bin/
 sudo chown root:root /usr/local/bin/osm-powerd
@@ -558,7 +606,7 @@ sudo tee /usr/share/applications/upgrade.desktop >/dev/null <<EOF
 Type=Application
 Name=System Upgrade
 Comment=System Upgrade
-Exec=alacritty -e sudo nala upgrade
+Exec=alacritty -e sudo nala upgrade -y
 Terminal=false
 Icon=upgrade
 Categories=System;
@@ -568,9 +616,9 @@ echo "• Creating bauh Shortcut..."
 sudo tee /usr/share/applications/bauh.desktop >/dev/null <<EOF
 [Desktop Entry]
 Type=Application
-Name=Apps (bauh)
+Name=App Store (bauh)
 Comment=Application Manager
-Exec=/usr/bin/bauh
+Exec=bauh
 Icon=bauh
 Categories=System;
 EOF
@@ -613,7 +661,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "• YouTube WebApp installed."
-
+echo " "
 
 # ────────────────────────────────────────────────
 # 15. Create Alternitech Forums WebApp
@@ -646,7 +694,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "• Alternitech Forums WebApp installed."
-
+echo " "
 
 # ────────────────────────────────────────────────
 # 16. Create OpenStreetMap WebApp
@@ -679,7 +727,7 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "• OpenStreetMap WebApp installed."
-
+echo " "
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 	^^^^	Add more WebApps here:	^^^^
@@ -706,7 +754,7 @@ sudo systemctl restart smbd nmbd || true
 echo " "
 
 echo "[5/10] Enabling autologin on tty1 for user $TARGET_USER..."
-
+echo " "
 sudo mkdir -p /etc/systemd/system/getty@tty1.service.d
 
 sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf >/dev/null <<EOF
@@ -719,6 +767,7 @@ EOF
 sudo systemctl daemon-reload
 
 echo "Setting NOPASSWD for $TARGET_USER..."
+echo " "
 echo "$TARGET_USER ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/wosp-shell-nopasswd >/dev/null
 sudo chmod 440 /etc/sudoers.d/wosp-shell-nopasswd
 
@@ -727,13 +776,19 @@ sudo chmod 440 /etc/sudoers.d/wosp-shell-nopasswd
 # 19. Finish + prompt
 # ────────────────────────────────────────────────
 echo " "
-
+echo "[Cleanup] sweeping installation crumbs..."
+sudo rm -r $HOME/WOSP-OS
+echo " "
 echo "=============================================="
 echo "     wosp-os installation complete!"
 echo "=============================================="
+echo " "
 echo "Everything installed to /usr/local/bin/"
+echo " "
 echo "Autologin + startx enabled for user: $TARGET_USER"
+echo " "
 echo ".xinitrc configured for Qtile."
+echo " "
 echo "Reboot to enter Wosp-shell automatically."
 echo ""
 echo "Press 1 to Restart"

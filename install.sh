@@ -572,8 +572,7 @@ sudo mv system.so /usr/local/bin/
 echo " "
 
 cd "$ALT_ROOT"
-sudo cp icons/update.png /usr/share/icons/hicolor/64x64/apps/update.png
-sudo cp icons/upgrade.png /usr/share/icons/hicolor/64x64/apps/upgrade.png
+
 
 echo "• Creating htop.desktop launcher..."
 sudo tee /usr/share/applications/htop.desktop >/dev/null <<EOF
@@ -588,29 +587,33 @@ Categories=System;
 EOF
 
 
+sudo cp icons/update.png /usr/share/icons/hicolor/64x64/apps/update.png
 echo "• Creating system-update launcher..."
 sudo tee /usr/share/applications/update.desktop >/dev/null <<EOF
 [Desktop Entry]
 Type=Application
-Name=System Update
+Name=Update & Upgrade (Linux)
 Comment=System Update
-Exec=alacritty -e sudo nala update
+Exec=alacritty -e sudo nala update && sudo nala upgrade -y
 Terminal=false
 Icon=update
 Categories=System;
 EOF
 
-echo "• Creating system-upgrade launcher..."
-sudo tee /usr/share/applications/upgrade.desktop >/dev/null <<EOF
-[Desktop Entry]
-Type=Application
-Name=System Upgrade
-Comment=System Upgrade
-Exec=alacritty -e sudo nala upgrade -y
-Terminal=false
-Icon=upgrade
-Categories=System;
-EOF
+
+#sudo cp icons/upgrade.png /usr/share/icons/hicolor/64x64/apps/upgrade.png
+#echo "• Creating system-upgrade launcher..."
+#sudo tee /usr/share/applications/upgrade.desktop >/dev/null <<EOF
+#[Desktop Entry]
+#Type=Application
+#Name=System Upgrade
+#Comment=System Upgrade
+#Exec=alacritty -e sudo nala upgrade -y
+#Terminal=false
+#Icon=upgrade
+#Categories=System;
+#EOF
+
 
 echo "• Creating bauh Shortcut..."
 sudo tee /usr/share/applications/bauh.desktop >/dev/null <<EOF
@@ -620,6 +623,22 @@ Name=App Store (bauh)
 Comment=Application Manager
 Exec=bauh
 Icon=bauh
+Categories=System;
+EOF
+
+
+echo "• Installing WOSP-OS Updater..."
+sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
+sudo mkdir /usr/share/wosp/
+sudo cp $HOME/WOSP-OS/update/version.txt /usr/share/wosp/
+
+sudo tee /usr/share/applications/os-check-update.desktop >/dev/null <<EOF
+[Desktop Entry]
+Name=OS Update (GUI)
+Exec=os-check-update
+Icon=os-check-update
+Type=Application
+Terminal=true
 Categories=System;
 EOF
 

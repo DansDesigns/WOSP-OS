@@ -15,7 +15,7 @@ echo "Checking for Linux System Updates..."
 echo " "
 sudo nala update
 echo " "
-echo "Checking for Linux System Upgrades…"
+echo "Applying Linux System Upgrades..."
 echo " "
 sudo nala upgrade
 echo " "

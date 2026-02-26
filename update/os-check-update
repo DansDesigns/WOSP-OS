@@ -1,17 +1,137 @@
 #!/bin/bash
 
+REPO_URL="https://github.com/DansDesigns/WOSP-OS.git"
+VERSION_URL=$(curl -fs https://raw.githubusercontent.com/DansDesigns/WOSP-OS/main/update/version.txt)
+
 LOCAL_VERSION=$(cat /usr/share/wosp/version.txt 2>/dev/null)
-REMOTE_VERSION=$(curl -fs https://github.com/DansDesigns/WOSP-OS/update/version.txt)
+REMOTE_VERSION=$(curl -fs $VERSION_URL)
 
-if [ -z "$REMOTE_VERSION" ]; then
-    echo "Unable to check for updates."
-    exit 1
-fi
 
-if dpkg --compare-versions "$REMOTE_VERSION" gt "$LOCAL_VERSION"; then
-    echo "Update available: $REMOTE_VERSION (installed: $LOCAL_VERSION)"
-    exit 10
-else
-    echo "OSM is up to date."
-    exit 0
-fi
+echo "=============================================="
+echo "                WOSP-OS Updater"
+echo "=============================================="
+echo " -------> Teaching Penguins to fly! <-------"
+echo " "
+echo "=============================================="
+echo "       Current Version: $LOCAL_VERSION"
+echo "=============================================="
+echo "Checking for Linux System Updates..."
+echo " "
+sudo nala update
+echo " "
+echo "Checking for Linux System Upgrades…"
+echo " "
+sudo nala upgrade
+echo " "
+echo "Checking for WOSP-OS Updates..."
+sleep 1
+while true; do
+
+    LOCAL_VERSION=$(cat /usr/share/wosp/version.txt 2>/dev/null)
+    REMOTE_VERSION=$(curl -fs "$VERSION_URL")
+
+    if [ -z "$REMOTE_VERSION" ]; then
+        echo ""
+        echo "[------ERROR------]"
+        echo "Unable to check for updates."
+        echo "Check Internet Connection."
+        echo ""
+        echo "1) Retry"
+        echo "2) Exit"
+        read -p "Select option: " choice
+
+        if [ "$choice" = "1" ]; then
+            clear
+            continue
+        else
+            exit 1
+        fi
+    fi
+
+    if dpkg --compare-versions "$REMOTE_VERSION" gt "$LOCAL_VERSION"; then
+        echo ""
+        echo "New Update found!"
+        echo ""
+        echo "--------------------------------"
+        echo "Current Version: $LOCAL_VERSION"
+        echo "New Version: $REMOTE_VERSION"
+        echo "--------------------------------"
+        echo ""
+        echo "Downloading Update..."
+        echo ""
+
+        TMP_DIR=$(mktemp -d) || exit 1
+
+        if ! git clone "$REPO_URL" "$TMP_DIR"; then
+            echo ""
+            echo "[------ERROR------]"
+            echo "Download failed.."
+            echo ""
+            cd /
+            rm -rf "$TMP_DIR"
+            
+            echo "1) Retry"
+            echo "2) Exit"
+            read -p "Select option: " choice1
+
+            if [ "$choice1" = "1" ]; then
+                clear
+                continue
+            else
+                exit 1
+            fi
+        fi
+
+        cd "$TMP_DIR" || exit 1
+
+        echo ""
+        echo "Download Complete!"
+        chmod +x install-update.sh
+        echo ""
+        echo "Installing Update..."
+        echo ""
+
+        if ! ./install-update.sh; then
+            echo ""
+            echo "[------ERROR------]"
+            echo "Installation failed.."
+            echo ""
+            cd /
+            rm -rf "$TMP_DIR"
+            
+            echo "1) Retry"
+            echo "2) Exit"
+            read -p "Select option: " choice2
+
+            if [ "$choice2" = "1" ]; then
+                clear
+                continue
+            else
+                exit 1
+            fi
+        fi
+        echo "=============================================="
+        echo "Installed Version:"
+        echo "$REMOTE_VERSION" | sudo tee /usr/share/wosp/version.txt > /dev/null
+        echo "=============================================="
+        cd /
+        echo ""
+        echo "Cleaning Installation Crumbs.."
+        rm -rf "$TMP_DIR"
+        echo ""
+        echo "This window will self-destruct in 5 seconds.."
+        sleep 5
+        break
+
+    else
+        echo " "
+        echo "No Update needed."
+        echo " "
+        echo "Current Version: $LOCAL_VERSION"
+        echo " "
+        sleep 2
+        echo "This window will self-destruct in 5 seconds.."
+        sleep 5
+        break
+    fi
+done

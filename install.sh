@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+clear
 
 echo "=============================================="
 echo "              Wosp-OS Installer"
@@ -9,6 +10,9 @@ echo " "
 echo "--------------------------------------------------------------------"
 echo " Setup can take a while, be sure to have a cuppa & some good music!"
 echo "--------------------------------------------------------------------"
+echo ""
+echo "NOTE: You will be asked for input several times."
+echo ""
 echo ""
 
 # Root of the wosp-os repo
@@ -57,7 +61,10 @@ if ! groups "$TARGET_USER" | grep -q "\bsudo\b"; then
 fi
 
 echo ""
+echo "---------------------------------------------------------------------------------------"
 echo "User setup complete. Username set to: $TARGET_USER"
+echo "---------------------------------------------------------------------------------------"
+echo ""
 echo ""
 
 # ────────────────────────────────────────────────
@@ -70,14 +77,14 @@ echo "[System] Adding Nala dependencies..."
 echo "deb http://deb.volian.org/volian/ nala main" | sudo tee /etc/apt/sources.list.d/volian.list
 wget -qO - https://deb.volian.org/volian/volian.gpg | sudo tee /etc/apt/trusted.gpg.d/volian.gpg
 
-echo "[System] Installing Nala.."
+echo "[System] Installing Nala..."
 sudo apt update -y && sudo apt install nala nala -y
 
-echo "[System] Removing nala Install Components.."
+echo "[System] Cleaning nala Install..."
 sudo rm /etc/apt/sources.list.d/volian.list
 sudo rm /etc/apt/trusted.gpg.d/volian.gpg
 
-echo "[System] Running nala server fetch.."
+echo "[System] Running nala server fetch..."
 echo " "
 echo "------------------------------------------------------"
 echo " PLEASE ENTER 1, 2, 3, 4, WHEN PROMPTED"
@@ -86,7 +93,7 @@ echo " "
 sudo nala fetch
 
 
-echo "-[System] Installing XLibre.."
+echo "-[System] Installing XLibre..."
 sudo nala install -y ca-certificates curl
 
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -107,22 +114,22 @@ sudo nala install xlibre -y
 
 
 
-echo "[System] Installing Required Components.."
+echo "[System] Installing Required Components..."
 sudo nala install -y \
     fastfetch qtile qtbase5-dev qt5-qmake qtbase5-dev-tools qtdeclarative5-dev \
-    fonts-noto-color-emoji libxcomposite-dev libxrender-dev libxfixes-dev \
+    fonts-noto-color-emoji libxcomposite-dev libxrender-dev libxfixes-dev xdg-utils \
     xwallpaper pkg-config libpoppler-qt5-dev htop python3-pip curl git fuse\
     python3-venv picom redshift onboard samba xdotool alacritty aria2 sqlite3\
     synaptic brightnessctl pavucontrol pulseaudio alsa-utils flatpak libevdev-dev\
     snapd power-profiles-daemon xprintidle libx11-dev libxtst-dev ntfs-3g \
-    kalk vlc qt5-style-kvantum network-manager libpolkit-agent-1-dev \
+    kalk vlc qt5-style-kvantum network-manager libpolkit-agent-1-dev aria2 \
     libpolkit-gobject-1-dev peazip aptitude timeshift xdg-utils python3-lxml\
     python3-yaml python3-dateutil python3-pyqt5 python3-packaging python3-request
 
-echo "[System] Installing Mobile Telephony Components.."
+echo "[System] Installing Mobile Telephony Components..."
 sudo nala install -y --no-install-recommends plasma-dialer spacebar
 
-echo "[System] Installing Bauh Application Manager.."
+echo "[System] Installing Bauh Application Manager..."
 sudo pip3 install bauh --break-system-packages
 
 
@@ -132,15 +139,13 @@ sudo pip3 install bauh --break-system-packages
 # ────────────────────────────────────────────────
 echo " "
 
-echo "[System] Installing Flatpaks.."
-
 # Delete APT Archive to free up space
 echo "[System] Clearing space in /var/cache/apt/archive..."
 sudo rm -r /var/cache/apt/archives
 
 # Enable Flathub repository (safe to run multiple times)
+echo "[System] Installing Flathub..."
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
 
 echo "[System] Installing Flatpaks..."
 
@@ -155,6 +160,7 @@ flatpak install -y flathub com.github.xournalpp.xournalpp
 #flatpak install -y flathub net.sourceforge.ExtremeTuxRacer
 #flatpak install -y flathub io.github.swordpuffin.hunt
 #flatpak install -y flathub com.github.avojak.warble
+
 
 # ────────────────────────────────────────────────
 # 3. Install all .deb packages in ../wosp-shell/installers/
@@ -198,6 +204,7 @@ echo "[System] Installing Starship prompt..."
 curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 # Add starship init to ~/.bashrc if it's not already present
+echo "[System] Add starship init to ~/.bashrc..."
 if ! grep -Fxq 'eval "$(starship init bash)"' "$HOME/.bashrc"; then
     echo 'eval "$(starship init bash)"' >> "$HOME/.bashrc"
 fi
@@ -587,18 +594,18 @@ Categories=System;
 EOF
 
 
-sudo cp icons/update.png /usr/share/icons/hicolor/64x64/apps/update.png
-echo "• Creating system-update launcher..."
-sudo tee /usr/share/applications/update.desktop >/dev/null <<EOF
-[Desktop Entry]
-Type=Application
-Name=Update & Upgrade (Linux)
-Comment=System Update
-Exec=alacritty -e sudo nala update && sudo nala upgrade -y
-Terminal=false
-Icon=update
-Categories=System;
-EOF
+#sudo cp icons/update.png /usr/share/icons/hicolor/64x64/apps/update.png
+#echo "• Creating system-update launcher..."
+#sudo tee /usr/share/applications/update.desktop >/dev/null <<EOF
+#[Desktop Entry]
+#Type=Application
+#Name=Update & Upgrade (Linux)
+#Comment=System Update
+#Exec=alacritty -e sudo nala update && sudo nala upgrade -y
+#Terminal=false
+#Icon=update
+#Categories=System;
+#EOF
 
 
 #sudo cp icons/upgrade.png /usr/share/icons/hicolor/64x64/apps/upgrade.png
@@ -616,6 +623,7 @@ EOF
 
 
 echo "• Creating bauh Shortcut..."
+sudo cp icons/bauh.png /usr/share/icons/hicolor/64x64/apps/bauh.png
 sudo tee /usr/share/applications/bauh.desktop >/dev/null <<EOF
 [Desktop Entry]
 Type=Application
@@ -628,14 +636,16 @@ EOF
 
 
 echo "• Installing WOSP-OS Updater..."
+sudo cp icons/os-check-update.png /usr/share/icons/hicolor/64x64/apps/os-check-update.png
+chmod +x $HOME/WOSP-OS/update/os-check-update
 sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
 sudo mkdir /usr/share/wosp/
 sudo cp $HOME/WOSP-OS/update/version.txt /usr/share/wosp/
 
 sudo tee /usr/share/applications/os-check-update.desktop >/dev/null <<EOF
 [Desktop Entry]
-Name=OS Update (GUI)
-Exec=os-check-update
+Name=System Update
+Exec=alacritty -e /usr/bin/os-check-update
 Icon=os-check-update
 Type=Application
 Terminal=true
@@ -749,9 +759,12 @@ echo "• OpenStreetMap WebApp installed."
 echo " "
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 	^^^^	Add more WebApps here:	^^^^
+# 	vvvv	Add more WebApps here:	vvvv
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 	^^^^	Add more WebApps here:	^^^^
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # ────────────────────────────────────────────────
 # 17. Installing Samba Network Updates
@@ -796,6 +809,7 @@ sudo chmod 440 /etc/sudoers.d/wosp-shell-nopasswd
 # ────────────────────────────────────────────────
 echo " "
 echo "[Cleanup] sweeping installation crumbs..."
+cd $HOME
 sudo rm -r $HOME/WOSP-OS
 echo " "
 echo "=============================================="
@@ -818,8 +832,10 @@ while true; do
     read -n 1 -s -r KEY
     if [[ "$KEY" == "1" ]]; then
         echo ""
-        echo "Restarting system..."
-        sleep 1
+        echo "Rebooting Now..."
+        echo " "
+        echo "This window will self-destruct in 5 seconds.."
+        sleep 5
         sudo reboot
         break
     elif [[ "$KEY" == "2" ]]; then

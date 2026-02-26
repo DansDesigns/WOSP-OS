@@ -1,10 +1,6 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/DansDesigns/WOSP-OS.git"
-VERSION_URL=$(curl -fs https://raw.githubusercontent.com/DansDesigns/WOSP-OS/main/update/version.txt)
 
-LOCAL_VERSION=$(cat /usr/share/wosp/version.txt 2>/dev/null)
-REMOTE_VERSION=$(curl -fs $VERSION_URL)
 
 
 echo "=============================================="
@@ -24,9 +20,14 @@ echo " "
 sudo nala upgrade
 echo " "
 echo "Checking for WOSP-OS Updates..."
-sleep 1
-while true; do
 
+REPO_URL="https://github.com/DansDesigns/WOSP-OS.git"
+VERSION_URL=$(curl -fs https://raw.githubusercontent.com/DansDesigns/WOSP-OS/main/update/version.txt)
+
+LOCAL_VERSION=$(cat /usr/share/wosp/version.txt 2>/dev/null)
+REMOTE_VERSION=$(curl -fs $VERSION_URL)
+
+while true; do
     LOCAL_VERSION=$(cat /usr/share/wosp/version.txt 2>/dev/null)
     REMOTE_VERSION=$(curl -fs "$VERSION_URL")
 

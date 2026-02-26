@@ -35,9 +35,12 @@ sudo cp icons/os-check-update.png /usr/share/icons/hicolor/64x64/apps/os-check-u
 chmod +x $HOME/WOSP-OS/update/os-check-update
 sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
 
+# Create Folder if not already existing:
+sudo mkdir /usr/share/wosp
+
 #=========================================
 # Update Version Number:
-sudo cp $HOME/WOSP-OS/update/version.txt /usr/share/wosp/
+sudo cp $HOME/WOSP-OS/update/version.txt /usr/share/wosp/version.txt
 
 #=========================================
 # Un-Comment to Update the App Launcher:

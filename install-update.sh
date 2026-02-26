@@ -4,7 +4,9 @@
 # Root of the Alternix repo
 ALT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
-echo "[UPDATE] Updating Alternix apps..."
+echo "=============================================="
+echo "               WOSP-OS Updater"
+echo "=============================================="
 cd "$ALT_ROOT/wosp-shell" || { echo "ERROR: $ALT_ROOT not found"; exit 1; }
 
 #===========================================================
@@ -28,23 +30,27 @@ echo "• Updating WOSP-OS Updater..."
 
 #=========================================
 # Un-Comment to update icon:
+echo "• Updating Icon..."
 sudo cp icons/os-check-update.png /usr/share/icons/hicolor/64x64/apps/os-check-update.png
 
 #=========================================
 # Update Updater:
+echo "• Updating the Updater..."
 chmod +x $HOME/WOSP-OS/update/os-check-update
 sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
 
 # Create Folder if not already existing:
-sudo mkdir /usr/share/wosp
+sudo mkdir /usr/share/wosp/
 
 #=========================================
 # Update Version Number:
+echo "• Updating Version Number..."
 sudo cp $HOME/WOSP-OS/update/version.txt /usr/share/wosp/version.txt
 
 #=========================================
 # Un-Comment to Update the App Launcher:
 
+echo "• Updating Launcher..."
 sudo tee /usr/share/applications/os-check-update.desktop >/dev/null <<EOF
 [Desktop Entry]
 Name=System Update

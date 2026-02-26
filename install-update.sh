@@ -1,11 +1,11 @@
 #!/bin/bash
 
 
-# Root of the Alternix repo
+# Root of the WOSP-OS repo
 ALT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "=============================================="
-echo "               WOSP-OS Updater"
+echo "               WOSP-OS Updates"
 echo "=============================================="
 cd "$ALT_ROOT/wosp-shell" || { echo "ERROR: $ALT_ROOT not found"; exit 1; }
 
@@ -40,7 +40,7 @@ chmod +x $HOME/WOSP-OS/update/os-check-update
 sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
 
 # Create Folder if not already existing:
-sudo mkdir /usr/share/wosp/
+#sudo mkdir /usr/share/wosp/
 
 #=========================================
 # Update Version Number:

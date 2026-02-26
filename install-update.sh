@@ -39,6 +39,7 @@ echo "• Updating the Updater..."
 chmod +x $HOME/WOSP-OS/update/os-check-update
 sudo cp $HOME/WOSP-OS/update/os-check-update /usr/bin/
 
+#=========================================
 # Create Folder if not already existing:
 #sudo mkdir /usr/share/wosp/
 

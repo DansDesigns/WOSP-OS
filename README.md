@@ -58,3 +58,10 @@ chmod +x install.sh
 Uses nala package manager as a replacement front-end for apt.
 
 install.sh contains all the packages and flatpaks to be installed, along with the compilation commands for the custom c++ qt5 apps. 
+
+```
+PLEASE NOTE, DUE TO INSANE PEOPLE IN POSITIONS OF POWER:
+
+California residents will no longer be able to use this OS after January 1st 2027
+Colorado residents will no longer be able to use this OS after January 1st 2028
+```

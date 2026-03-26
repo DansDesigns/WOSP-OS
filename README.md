@@ -10,6 +10,8 @@ includes installer script & custom C++ qt5 apps - more info in forums.
 
 Key commands:
 ```
+WIN + A: App Launcher
+
 WIN + N: Popup Shortcut Menu
 
 WIN + P: Power Menu
@@ -20,9 +22,15 @@ WIN + F: Fullscreen Toggle
 
 WIN + R: Spawn Run Prompt
 
+WIN + W: Close Window
+
+WIN + T: Floating Window Toggle
+
 WIN + 1, 2, 3: Switch to Desktop 1, 2, 3
 
 WIN + SHIFT + 1 ,2 ,3: Move Window & Switch to Desktop 1, 2, 3
+
+CTRL + SPACE: open Ulauncher Application, file & search bar
 
 ```
 

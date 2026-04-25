@@ -8,7 +8,7 @@ includes installer script & custom C++ qt5 apps - more info in forums.
 # WHILE USABLE, WOSP-OS IS STILL IN DEVELOPMENT
 
 
-Key commands:
+Desktop Mode Key commands:
 ```
 WIN + A: App Launcher
 
